@@ -66,7 +66,7 @@ def get_db() -> mysql.connector.connection.MySQLConnection:
 
 
 # task 4
-def main():
+def main() -> None:
     """a function called main that takes no arguments"""
     db = get_db()
     cursor = db.cursor()
