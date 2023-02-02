@@ -5,7 +5,7 @@ Main file
 import logging
 import re
 
-
+# task 1
 filter_datum = __import__('filtered_logger').filter_datum
 
 fields = ["password", "date_of_birth"]
@@ -15,7 +15,7 @@ for message in messages:
     print(filter_datum(fields, 'xxx', message, ';'))
 
 
-
+# task 2
 RedactingFormatter = __import__('filtered_logger').RedactingFormatter
 
 message = "name=Bob;email=bob@dylan.com;ssn=000-123-0000;password=bobby2019;"
@@ -29,3 +29,15 @@ PII_FIELDS = __import__('filtered_logger').PII_FIELDS
 
 print(get_logger.__annotations__.get('return'))
 print("PII_FIELDS: {}".format(len(PII_FIELDS)))
+
+
+# task 3
+get_db = __import__('filtered_logger').get_db
+
+db = get_db()
+cursor = db.cursor()
+cursor.execute("SELECT COUNT(*) FROM users;")
+for row in cursor:
+    print(row[0])
+cursor.close()
+db.close()
