@@ -54,17 +54,13 @@ def get_logger() -> logging.Logger:
     return logger
 
 
-def get_db():
+def get_db() -> mysql.connector.connection.MySQLConnection:
     """a function called get_db that takes no arguments"""
-    host = os.getenv('PERSONAL_DATA_DB_HOST') or 'localhost'
-    database = os.getenv('PERSONAL_DATA_DB_NAME')
-    user = os.getenv('PERSONAL_DATA_DB_USERNAME') or 'root'
-    password = os.getenv('PERSONAL_DATA_DB_PASSWORD') or ''
     db = mysql.connector.connect(
-        host=host,
-        database=database,
-        user=user,
-        password=password
+        host=os.environ.get('PERSONAL_DATA_DB_HOST', 'localhost'),
+        database=os.environ.get('PERSONAL_DATA_DB_NAME'),
+        user=os.environ.get('PERSONAL_DATA_DB_USERNAME', 'root'),
+        password=os.environ.get('PERSONAL_DATA_DB_PASSWORD', '')
     )
     return db
 
