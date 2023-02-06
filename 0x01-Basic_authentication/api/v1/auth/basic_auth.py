@@ -1,7 +1,7 @@
-#!/usr/bin//env python3
+#!/usr/bin/env python3
 """Basic Auth"""
 from api.v1.auth.auth import Auth
-from typing import TypeVar
+from typing import Tuple, TypeVar
 from models.user import User
 
 
@@ -39,7 +39,7 @@ class BasicAuth(Auth):
 
     def extract_user_credentials(self,
                                  decoded_base64_authorization_header: str
-                                 ) -> (str, str):
+                                 ) -> Tuple[str, str]:
         """Extract user credentials
         """
         if decoded_base64_authorization_header is None:
@@ -86,3 +86,5 @@ class BasicAuth(Auth):
         if email is None or pwd is None:
             return None
         return self.user_object_from_credentials(email, pwd)
+
+# --- END User
