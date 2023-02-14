@@ -34,42 +34,37 @@ class DB:
         return self.__session
 
     def add_user(self, email: str, hashed_password: str) -> User:
-        """
-        Create a User object and save it to the database
-        Args:
-            email (str): user's email address
-            hashed_password (str): password hashed by bcrypt's hashpw
-        Return:
-            Newly created User object
+        """Add a user to the database
         """
         user = User(email=email, hashed_password=hashed_password)
         self._session.add(user)
         self._session.commit()
+        # self._session.close()
         return user
 
-    # def find_user_by(self, **kwargs) -> User:
-    #     """Find a user by keyword arguments
-    #     """
-    #     if not kwargs:
-    #         raise InvalidRequestError(f"Invalid")
+    def find_user_by(self, **kwargs) -> User:
+        """Find a user by keyword arguments
+        """
+        if not kwargs:
+            raise InvalidRequestError(f"Invalid")
 
-    #     user = self._session.query(User).filter_by(**kwargs).first()
-    #     # self._session.close()
-    #     if user is None:
-    #         raise NoResultFound(f"Not found")
+        user = self._session.query(User).filter_by(**kwargs).first()
+        # self._session.close()
+        if user is None:
+            raise NoResultFound(f"Not found")
 
-    #     return user
+        return user
 
-    # def update_user(self, user_id: int, **kwargs) -> None:
-    #     """Update a user by keyword arguments
-    #     """
-    #     user = self.find_user_by(id=user_id)
-    #     for key, value in kwargs.items():
-    #         if key not in ["id", "email", "hashed_password", "session_id",
-    #                        "reset_token"]:
-    #             raise ValueError(f"Invalid")
+    def update_user(self, user_id: int, **kwargs) -> None:
+        """Update a user by keyword arguments
+        """
+        user = self.find_user_by(id=user_id)
+        for key, value in kwargs.items():
+            if key not in ["id", "email", "hashed_password", "session_id",
+                           "reset_token"]:
+                raise ValueError(f"Invalid")
 
-    #         setattr(user, key, value)
-    #     self._session.commit()
-    #     # self._session.close()
-    #     return None
+            setattr(user, key, value)
+        self._session.commit()
+        # self._session.close()
+        return None
