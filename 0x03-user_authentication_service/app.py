@@ -28,29 +28,31 @@ def reg_user():
         return jsonify({"message": "email already registered"}), 400
 
 
-@app.route('/sessions', methods=['POST', 'DELETE'], strict_slashes=False)
+@app.route('/sessions', methods=['POST'], strict_slashes=False)
 def login():
-    """Login/Logout user"""
-    if request.method == 'POST':
-        email = request.form.get('email')
-        password = request.form.get('password')
-        valid_login = Auth.valid_login(email, password)
-        if valid_login:
-            session_id = Auth.create_session(email)
-            response = jsonify({"email": email, "message": "logged in"})
-            response.set_cookie('session_id', session_id)
-            return response
-        else:
-            abort(401)
+    """Login user"""
+    email = request.form.get('email')
+    password = request.form.get('password')
+    valid_login = Auth.valid_login(email, password)
+    if valid_login:
+        session_id = Auth.create_session(email)
+        response = jsonify({"email": email, "message": "logged in"})
+        response.set_cookie('session_id', session_id)
+        return response
+    else:
+        abort(401)
 
-    if request.method == 'DELETE':
-        session_id = request.cookies.get('session_id')
-        user = Auth.get_user_from_session_id(session_id)
-        if user:
-            Auth.destroy_session(user.id)
-            return redirect(url_for('welcome'))
-        else:
-            abort(403)
+
+@app.route('/sessions', methods=['DELETE'], strict_slashes=False)
+def logout():
+    """Logout user"""
+    session_id = request.cookies.get('session_id')
+    user = Auth.get_user_from_session_id(session_id)
+    if user:
+        Auth.destroy_session(user.id)
+        return redirect(url_for('welcome'))
+    else:
+        abort(403)
 
 
 @app.route('/profile', methods=['GET'], strict_slashes=False)
