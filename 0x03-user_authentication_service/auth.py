@@ -4,7 +4,7 @@ Auth module
 """
 import bcrypt
 from db import DB
-from sqlalchemy.exc import NoResultFound
+from sqlalchemy.orm.exc import NoResultFound
 import uuid
 from user import User
 
