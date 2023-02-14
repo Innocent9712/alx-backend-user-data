@@ -28,19 +28,34 @@ def reg_user():
         return jsonify({"message": "email already registered"}), 400
 
 
+# @app.route('/sessions', methods=['POST'], strict_slashes=False)
+# def login() -> dict:
+#     """Login user"""
+#     email = request.form.get('email')
+#     password = request.form.get('password')
+#     valid_login = Auth.valid_login(email, password)
+#     if valid_login:
+#         session_id = Auth.create_session(email)
+#         response = jsonify({"email": email, "message": "logged in"})
+#         response.set_cookie('session_id', session_id)
+#         return response
+#     else:
+#         abort(401)
+
 @app.route('/sessions', methods=['POST'], strict_slashes=False)
 def login() -> str:
-    """Login user"""
+    """this function creates a new session for the user, store it in the
+    session ID as a cookie with key "session_id" and returns JSON payload"""
     email = request.form.get('email')
     password = request.form.get('password')
     valid_login = Auth.valid_login(email, password)
-    if valid_login:
-        session_id = Auth.create_session(email)
-        response = jsonify({"email": email, "message": "logged in"})
-        response.set_cookie('session_id', session_id)
-        return response
-    else:
+
+    if not valid_login:
         abort(401)
+    session_id = Auth.create_session(email)
+    response = jsonify({"email": f"{email}", "message": "logged in"})
+    response.set_cookie('session_id', session_id)
+    return response
 
 
 @app.route('/sessions', methods=['DELETE'], strict_slashes=False)
